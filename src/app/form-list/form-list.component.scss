@@ -1,0 +1,35 @@
+table {
+  td {
+    background: rgb(201, 201, 201) !important;
+    cursor: pointer;
+    border: 3px solid black;
+
+    &:hover {
+      background: white !important;
+      border-right: 5px solid white;
+    }
+  }
+}
+
+.permissions-heading {
+  border-bottom: 2px solid black;
+  padding-bottom: 5px;
+}
+
+.sidebar {
+  height: 100dvh;
+  padding: 0;
+}
+
+.member-table {
+  td {
+    background: white !important;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid black;
+
+    &:hover {
+      border-right: none !important;
+    }
+  }
+}

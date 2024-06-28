@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <h1 class="permissions-heading">Permissions</h1>
+  <div class="row">
+    <div class="col-lg-2 col-md-3">
+      <div class="list-group sidebar">
+        <table class="table">
+          <tbody>
+            <tr *ngFor="let item of Arr; let i = index">
+              <td class="p-4" (click)="pickGroup(item)">
+                {{ item.Name }}
+                <span class="ml-4" (click)="edit(i)"> ✎ </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <tr>
+          <td class="p-4" [routerLink]="['add-form']">+ Add New Group</td>
+        </tr>
+      </div>
+    </div>
+    <div class="col-lg-10 col-md-9">
+      <div class="p-4 list-group members">
+        <h6>Roles</h6>
+        <table *ngIf="currentGroup != null" class="member-table">
+          <tbody>
+            <tr *ngFor="let item of RolesArr; let i = index">
+              <td class="p-4">
+                <input
+                  type="checkbox"
+                  [checked]="currentGroup.roles.includes(item.id)"
+                  (change)="setUser(item.id, $event)"
+                />
+              </td>
+              <td class="p-4">{{ item.Name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
