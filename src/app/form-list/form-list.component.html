@@ -8,7 +8,7 @@
             <tr *ngFor="let item of Arr; let i = index">
               <td class="p-4" (click)="pickGroup(item)">
                 {{ item.Name }}
-                <span class="ml-4" (click)="edit(i)"> ✎ </span>
+                <span class="ml-4" (click)="edit(i)">✎</span>
               </td>
             </tr>
           </tbody>
@@ -20,10 +20,30 @@
     </div>
     <div class="col-lg-10 col-md-9">
       <div class="p-4 list-group members">
-        <h6>Roles</h6>
+        <div class="d-flex align-items-center mb-3">
+          <h6 class="mr-3">Roles</h6>
+          <input
+            type="text"
+            class="form-control mr-2"
+            placeholder="Search roles..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="filterRoles()"
+          />
+          <select
+            class="form-control"
+            [(ngModel)]="filterOption"
+            (ngModelChange)="filterRoles()"
+          >
+            <option value="all">Show All</option>
+            <option value="marked">Marked Roles</option>
+            <option value="label">Filter by Label</option>
+          </select>
+        </div>
         <table *ngIf="currentGroup != null" class="member-table">
           <tbody>
-            <tr *ngFor="let item of RolesArr; let i = index">
+            <tr
+              *ngFor="let item of filteredRoles | paginate: { itemsPerPage: 10, currentPage: currentPage }; let i = index"
+            >
               <td class="p-4">
                 <input
                   type="checkbox"
@@ -35,6 +55,9 @@
             </tr>
           </tbody>
         </table>
+        <pagination-controls
+          (pageChange)="currentPage = $event"
+        ></pagination-controls>
       </div>
     </div>
   </div>

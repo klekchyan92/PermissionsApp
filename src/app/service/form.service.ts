@@ -7,11 +7,11 @@ export class FormService {
 
   serviceArray: any[] = [{
     Name: "Admins",
-    roles: [1, 3,]
+    roles: [1, 3]
   },
   {
     Name: "General Managers",
-    roles: [2, 4,]
+    roles: [2, 4]
   }, {
     Name: "Managers - Tech",
     roles: []
@@ -22,7 +22,13 @@ export class FormService {
     Name: "Managers - Sales",
     roles: []
   }, {
-    Name: "Support",
+    Name: "Support - Tech",
+    roles: []
+  }, {
+    Name: "Support - Billing",
+    roles: []
+  }, {
+    Name: "Support - Sales",
     roles: []
   }];
 
@@ -41,8 +47,15 @@ export class FormService {
   {
     id: 4,
     Name: 'Drug User'
-  },
-  ]
+  }]
 
   constructor() { }
+
+  addOrUpdateGroup(index: number, group: any) {
+    if (index !== null && index >= 0 && index < this.serviceArray.length) {
+      this.serviceArray[index] = group;
+    } else {
+      this.serviceArray.push(group);
+    }
+  }
 }

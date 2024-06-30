@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../service/form.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-add-form',
   templateUrl: './add-form.component.html',
@@ -9,39 +10,34 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 })
 export class AddFormComponent implements OnInit {
 
-  title = "Add Group"
-  submit = false
-  // editData :any;
-  FormDataArray: any[] = []
+  title = "Add Group";
+  submit = false;
   index: any;
   item: any;
 
-  ngOnInit(): void {
-    this.index = this.activeRoute.snapshot.paramMap.get('index');
-    console.log('Index is', this.index);
-    if (this.index >= 0 && this.index < this.serviceArr.serviceArray.length) {
-
-      this.item = this.serviceArr.serviceArray[this.index];
-      console.log('Item is', this.item);
-      this.addform.patchValue({
-        Name: this.item.Name,
-      });
-    } else {
-      console.error('Invalid index');
-    }
-
-  }
-
-  constructor(private form: FormBuilder,
+  constructor(
+    private form: FormBuilder,
     private serviceArr: FormService,
     private route: Router,
     private activeRoute: ActivatedRoute
   ) { }
 
+  ngOnInit(): void {
+    this.index = this.activeRoute.snapshot.paramMap.get('index');
+    if (this.index !== null && +this.index >= 0 && +this.index < this.serviceArr.serviceArray.length) {
+      this.item = this.serviceArr.serviceArray[+this.index];
+      this.addform.patchValue({
+        Name: this.item.Name,
+      });
+    } else {
+      this.index = null;  // reset index if invalid
+      this.item = null;
+    }
+  }
 
   addform = this.form.group({
     Name: ['', Validators.required],
-  })
+  });
 
   get formData() {
     return this.addform.controls;
@@ -51,35 +47,19 @@ export class AddFormComponent implements OnInit {
     this.submit = true;
 
     if (this.addform.valid) {
-      if (this.item && this.item.Name) {
-        this.item = this.addform.value
-        const itemIndex = this.serviceArr.serviceArray.findIndex((element) => element.id === this.item.id);
-        this.serviceArr.serviceArray[itemIndex] = this.item;
-        console.log(this.serviceArr.serviceArray[itemIndex]);
+      const formValue = this.addform.value;
+      const group = {
+        Name: formValue.Name,
+        roles: this.item ? this.item.roles : []
+      };
 
-
-      } else {
-        this.FormDataArray.push(this.addform.value);
-        this.serviceArr.serviceArray.push(this.addform.value);
-        console.log(this.serviceArr.serviceArray);
-        const newItem = this.addform.value;
-        // this.serviceArr.serviceArray.push(newItem);
-      }
-
+      this.serviceArr.addOrUpdateGroup(this.index, group);
       this.route.navigate(['']);
       this.addform.reset();
-
-
     }
   }
-
 
   resetForm() {
     this.addform.reset();
   }
-
 }
-
-
-
-
